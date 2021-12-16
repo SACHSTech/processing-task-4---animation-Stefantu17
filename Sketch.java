@@ -1,53 +1,73 @@
+import javax.annotation.processing.SupportedAnnotationTypes;
 import processing.core.PApplet;
 
 public class Sketch extends PApplet {
 
+// Global Variables
+float inverseX;
+public double circleX = 0;
+public double circleY = 250;
+public float circleWidth = 50;
+public float circleHeight = 50;
+public double speed = 5;
+public boolean sun = true;
+public boolean moon = false;
+public float transparency = 1;
+public int day = color(51, 198, 255);
+public int night = color(15, 3, 36);
+public float amt = 0;
 
-  /**
-   * state global variables
-   *  
-   * */ 
-  public float circleY = -50;
-
-	
-	
-  /**
-   * Called once at the beginning of execution, put your size all in this method
-   */
   public void settings() {
-	  // put your size call here
-    size(200, 200);
+    size(800, 300);
+    smooth();
   }
 
-  /** 
-   * Called once at the beginning of execution.  Add initial set up
-   * values here i.e background, stroke, fill etc.
-   */
   public void setup() {
-    background(210, 255, 173);
+    background(0);
   }
 
-  /**
-   * Called repeatedly, anything drawn to the screen goes here
-   */
   public void draw() {
-	  
-    // clear out old frames
-    background(32);
 
-    // draw current frame based on state
-    ellipse(100, circleY, 50, 50);
-  
-    // modify state
-    circleY = circleY + 1;
-  
-    // reset state
-    if(circleY > height+50) {
-      circleY = 0;
+    if (sun == true) {
+      background(lerpColor(night, day, (float) amt));
+      amt += 0.03;
+      fill(246, 255, 51);
+      ellipse(inverseX, (float)circleY, circleWidth, circleHeight);
+      circleX += speed;
+      circleY = (0.0009 * (Math.pow(circleX - width/2, 2))) + 100;
+      inverseX = width - (float) circleX;
+      fill(85, 234, 19);
+      rect(0, 250, width, height - 40);
+      fill(116, 91, 14);
+      rect(0, 260, width, height);
+      fill(116, 91, 14);
+      if (circleY >= 300) {
+          moon = true;
+          sun = false;
+          circleX = 0;
+          circleY = 250;
+          amt = 0;
+      }
+    }
+    else if (moon == true) {
+      background(lerpColor(day, night, (float) amt));
+      amt += 0.03;
+      fill(255, 255, 255);
+      ellipse(inverseX, (float)circleY, circleWidth, circleHeight);
+      circleX += speed;
+      circleY = (0.0009 * (Math.pow(circleX - width/2, 2))) + 100;
+      inverseX = width - (float) circleX;
+      fill(17, 99, 9);
+      rect(0, 250, width, height - 40);
+      fill(80, 63, 9);
+      rect(0, 260, width, height);
+      if (circleY >= 300) {
+          sun = true;
+          moon = false;
+          circleX = 0;
+          circleY = 250;
+          amt = 0;
+      }
     }
   }
-  
-  // define other methods down here.
-
-
 }
