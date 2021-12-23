@@ -7,7 +7,7 @@ public class Sketch extends PApplet {
 */
 
 // Inverse for X
-float inverseX;
+public float inverseX;
 
 // Circle x and y starting values
 public double circleX = 0;
@@ -28,7 +28,15 @@ public boolean moon = false;
 public float transparency = 1;
 public int day = color(51, 198, 255);
 public int night = color(15, 3, 36);
+public int starColor = color(255, 255, 255);
 public float amt = 0;
+
+// Ground colours
+
+public int grass1 = color(85, 234, 19);
+public int ground1 = color(116, 91, 14);
+public int grass2 = color(6, 81, 23);
+public int ground2 = color(48, 37, 4);
 
   public void settings() {
     size(800, 300);
@@ -39,13 +47,16 @@ public float amt = 0;
     background(0);
   }
 
+  public void stars() {
+    // TO DO
+  }
+
   public void draw() {
 
     if (sun == true) {
 
       // Backgound
       background(lerpColor(night, day, amt));
-      amt += 0.03;
 
       // Parabola-arch circle movement
       fill(246, 255, 51);
@@ -55,10 +66,13 @@ public float amt = 0;
       inverseX = width - (float) circleX;
 
       // Ground
-      fill(85, 234, 19);
+      fill(lerpColor(grass2, grass1, amt));
       rect(0, 250, width, height - 40);
-      fill(116, 91, 14);
+      fill(lerpColor(ground2, ground1, amt));
       rect(0, 260, width, height);
+      
+      // Increase amount 
+      amt += 0.03;
 
       // Reset values
       if (circleY >= 300) {
@@ -74,7 +88,6 @@ public float amt = 0;
 
       // Background
       background(lerpColor(day, night, amt));
-      amt += 0.03;
 
       // Parabola-arch circle movement
       fill(255, 255, 255);
@@ -84,10 +97,13 @@ public float amt = 0;
       inverseX = width - (float) circleX;
 
       // Ground
-      fill(17, 99, 9);
+      fill(lerpColor(grass1, grass2, amt));
       rect(0, 250, width, height - 40);
-      fill(80, 63, 9);
+      fill(lerpColor(ground1, ground2, amt));
       rect(0, 260, width, height);
+
+      // Increase amount
+      amt += 0.03;
 
       // Reset values
       if (circleY >= 300) {
