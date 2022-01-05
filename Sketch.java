@@ -2,52 +2,117 @@ import processing.core.PApplet;
 
 public class Sketch extends PApplet {
 
+/**
+  Global Variables
+*/
 
-  /**
-   * state global variables
-   *  
-   * */ 
-  public float circleY = -50;
+// Inverse for X
+public float inverseX;
 
-	
-	
-  /**
-   * Called once at the beginning of execution, put your size all in this method
-   */
+// Circle x and y starting values
+public double circleX = 0;
+public double circleY = 250;
+
+// Circle size values
+public float circleWidth = 50;
+public float circleHeight = 50;
+
+// Speed of the moving circle
+public double speed = 5;
+
+// Situation conditionals
+public boolean sun = true;
+public boolean moon = false;
+
+// Background fade inital values
+public float transparency = 1;
+public int day = color(51, 198, 255);
+public int night = color(15, 3, 36);
+public int starColor = color(255, 255, 255);
+public float amt = 0;
+
+// Ground colours
+
+public int grass1 = color(85, 234, 19);
+public int ground1 = color(116, 91, 14);
+public int grass2 = color(6, 81, 23);
+public int ground2 = color(48, 37, 4);
+
   public void settings() {
-	  // put your size call here
-    size(200, 200);
+    size(800, 300);
+    smooth();
   }
 
-  /** 
-   * Called once at the beginning of execution.  Add initial set up
-   * values here i.e background, stroke, fill etc.
-   */
   public void setup() {
-    background(210, 255, 173);
+    background(0);
   }
 
-  /**
-   * Called repeatedly, anything drawn to the screen goes here
-   */
-  public void draw() {
-	  
-    // clear out old frames
-    background(32);
+  public void stars() {
+    // TO DO
+  }
 
-    // draw current frame based on state
-    ellipse(100, circleY, 50, 50);
-  
-    // modify state
-    circleY = circleY + 1;
-  
-    // reset state
-    if(circleY > height+50) {
-      circleY = 0;
+  public void draw() {
+
+    if (sun == true) {
+
+      // Backgound
+      background(lerpColor(night, day, amt));
+
+      // Parabola-arch circle movement
+      fill(246, 255, 51);
+      ellipse(inverseX, (float)circleY, circleWidth, circleHeight);
+      circleX += speed;
+      circleY = (0.0009 * (Math.pow(circleX - width/2, 2))) + 100;
+      inverseX = width - (float) circleX;
+
+      // Ground
+      fill(lerpColor(grass2, grass1, amt));
+      rect(0, 250, width, height - 40);
+      fill(lerpColor(ground2, ground1, amt));
+      rect(0, 260, width, height);
+      
+      // Increase amount 
+      amt += 0.03;
+
+      // Reset values
+      if (circleY >= 300) {
+        moon = true;
+        sun = false;
+        circleX = 0;
+        circleY = 250;
+        amt = 0;
+      }
+    }
+
+    else if (moon == true) {
+
+      // Background
+      background(lerpColor(day, night, amt));
+
+      // Parabola-arch circle movement
+      fill(255, 255, 255);
+      ellipse(inverseX, (float)circleY, circleWidth, circleHeight);
+      circleX += speed;
+      circleY = (0.0009 * (Math.pow(circleX - width/2, 2))) + 100;
+      inverseX = width - (float) circleX;
+
+      // Ground
+      fill(lerpColor(grass1, grass2, amt));
+      rect(0, 250, width, height - 40);
+      fill(lerpColor(ground1, ground2, amt));
+      rect(0, 260, width, height);
+
+      // Increase amount
+      amt += 0.03;
+
+      // Reset values
+      if (circleY >= 300) {
+        sun = true;
+        moon = false;
+        circleX = 0;
+        circleY = 250;
+        amt = 0;
+      }
     }
   }
-  
-  // define other methods down here.
-
-
 }
